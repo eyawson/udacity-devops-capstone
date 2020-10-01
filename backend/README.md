@@ -1,54 +1,52 @@
-# ![Rails Example App](project-logo.png)
+# ![Node/Express/Mongoose Example App](project-logo.png)
 
-> Example Rails codebase that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) API spec.
+[![Build Status](https://travis-ci.org/anishkny/node-express-realworld-example-app.svg?branch=master)](https://travis-ci.org/anishkny/node-express-realworld-example-app)
 
-This repo is functionality complete -- PRs and issues welcome!
+> ### Example Node (Express + Mongoose) codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) API spec.
 
-Check out the [rails-5.1 branch](https://github.com/gothinkster/rails-realworld-example-app/tree/rails-5.1) to see the updated code for Rails 5.1
+<a href="https://thinkster.io/tutorials/node-json-api" target="_blank"><img width="454" src="https://raw.githubusercontent.com/gothinkster/realworld/master/media/learn-btn-hr.png" /></a>
+
+This repo is functionality complete — PRs and issues welcome!
 
 # Getting started
 
-To get the Rails server running locally:
+To get the Node server running locally:
 
 - Clone this repo
-- `bundle install` to install all req'd dependencies
-- `rake db:migrate` to make all database migrations
-- `rails s` to start the local server
+- `npm install` to install all required dependencies
+- Install MongoDB Community Edition ([instructions](https://docs.mongodb.com/manual/installation/#tutorials)) and run it by executing `mongod`
+- `npm run dev` to start the local server
 
-
+Alternately, to quickly try out this repo in the cloud, you can [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/remix/realworld)
 
 # Code Overview
 
 ## Dependencies
 
-- [acts_as_follower](https://github.com/tcocca/acts_as_follower) - For implementing followers/following
-- [acts_as_taggable](https://github.com/mbleigh/acts-as-taggable-on) - For implementing tagging functionality
-- [Devise](https://github.com/plataformatec/devise) - For implementing authentication
-- [Jbuilder](https://github.com/rails/jbuilder) - Default JSON rendering gem that ships with Rails, used for making reusable templates for JSON output.
-- [JWT](https://github.com/jwt/ruby-jwt) - For generating and validating JWTs for authentication
+- [expressjs](https://github.com/expressjs/express) - The server for handling and routing HTTP requests
+- [express-jwt](https://github.com/auth0/express-jwt) - Middleware for validating JWTs for authentication
+- [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - For generating JWTs used by authentication
+- [mongoose](https://github.com/Automattic/mongoose) - For modeling and mapping MongoDB data to javascript 
+- [mongoose-unique-validator](https://github.com/blakehaswell/mongoose-unique-validator) - For handling unique validation errors in Mongoose. Mongoose only handles validation at the document level, so a unique index across a collection will throw an exception at the driver level. The `mongoose-unique-validator` plugin helps us by formatting the error like a normal mongoose `ValidationError`.
+- [passport](https://github.com/jaredhanson/passport) - For handling user authentication
+- [slug](https://github.com/dodo/node-slug) - For encoding titles into a URL-friendly format
 
-## Folders
+## Application Structure
 
-- `app/models` - Contains the database models for the application where we can define methods, validations, queries, and relations to other models.
-- `app/views` - Contains templates for generating the JSON output for the API
-- `app/controllers` - Contains the controllers where requests are routed to their actions, where we find and manipulate our models and return them for the views to render.
-- `config` - Contains configuration files for our Rails application and for our database, along with an `initializers` folder for scripts that get run on boot.
-- `db` - Contains the migrations needed to create our database schema.
+- `app.js` - The entry point to our application. This file defines our express server and connects it to MongoDB using mongoose. It also requires the routes and models we'll be using in the application.
+- `config/` - This folder contains configuration for passport as well as a central location for configuration/environment variables.
+- `routes/` - This folder contains the route definitions for our API.
+- `models/` - This folder contains the schema definitions for our Mongoose models.
 
-## Configuration
+## Error Handling
 
-### camelCase Payloads
+In `routes/api/index.js`, we define a error-handling middleware for handling Mongoose's `ValidationError`. This middleware will respond with a 422 status code and format the response to have [error messages the clients can understand](https://github.com/gothinkster/realworld/blob/master/API.md#errors-and-status-codes)
 
-- [`config/initializers/jbuilder.rb`](https://github.com/gothinkster/rails-realworld-example-app/blob/master/config/initializers/jbuilder.rb) - Jbuilder configuration for camelCase output
-- [`app/controllers/application_controller.rb#underscore_params!`](https://github.com/gothinkster/rails-realworld-example-app/blob/master/app/controllers/application_controller.rb#L44) - Convert camelCase params into snake_case params
+## Authentication
 
-### null_session
+Requests are authenticated using the `Authorization` header with a valid JWT. We define two express middlewares in `routes/auth.js` that can be used to authenticate requests. The `required` middleware configures the `express-jwt` middleware using our application's secret and will return a 401 status code if the request cannot be authenticated. The payload of the JWT can then be accessed from `req.payload` in the endpoint. The `optional` middleware configures the `express-jwt` in the same way as `required`, but will *not* return a 401 status code if the request cannot be authenticated.
 
-By default Ruby on Rails will throw an exception when a request doesn't contain a valid CSRF token. Since we're using JWT's to authenticate users instead of sessions, we can tell Rails to use an empty session instead of throwing an exception for requests by specifying `:null_session` in [app/controllers/application_controller.rb](https://github.com/gothinkster/rails-realworld-example-app/blob/master/app/controllers/application_controller.rb#L4).
 
-### Authentication
+<br />
 
-Requests are authenticated using the `Authorization` header with a valid JWT. The [application_controller.rb#authenticate_user!](https://github.com/gothinkster/rails-realworld-example-app/blob/master/app/controllers/application_controller.rb#L32) filter is used like the one provided by Devise, it will respond with a 401 status code if the request requires authentication that hasn't been provided. The [application_controller.rb#authenticate_user](https://github.com/gothinkster/rails-realworld-example-app/blob/master/app/controllers/application_controller.rb#L18) filter is called on every request to try and authenticate the `Authorization` header. It will only interrupt the request if a JWT is present and invalid. The user's id is then parsed from the JWT and stored in an instance variable called [`@current_user_id`](https://github.com/gothinkster/rails-realworld-example-app/blob/master/app/controllers/application_controller.rb#L24). `@current_user_id` can be used in any controller when we only need the user's id to save a trip to the database. Otherwise, we can call [`current_user`](https://github.com/gothinkster/rails-realworld-example-app/blob/master/app/controllers/application_controller.rb#L36) to fetch the authenticated user from the database.
-
-Devise only requires an email and password upon registration. To allow additional parameters on sign up, we use [application_controller#configure_permitted_parameters](https://github.com/gothinkster/rails-realworld-example-app/blob/master/app/controllers/application_controller.rb#L14) to allow additional parameters.
-
+[![Brought to you by Thinkster](https://raw.githubusercontent.com/gothinkster/realworld/master/media/end.png)](https://thinkster.io)

@@ -1,83 +1,74 @@
+# ![React + Redux Example App](project-logo.png)
+
 [![RealWorld Frontend](https://img.shields.io/badge/realworld-frontend-%23783578.svg)](http://realworld.io)
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-# ![RealWorld Example App](./static/rwv-logo.png)
+> ### React + Redux codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) spec and API.
 
-> Vue.js codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
+<a href="https://stackblitz.com/edit/react-redux-realworld" target="_blank"><img width="187" src="https://github.com/gothinkster/realworld/blob/master/media/edit_on_blitz.png?raw=true" /></a>&nbsp;&nbsp;<a href="https://thinkster.io/tutorials/build-a-real-world-react-redux-application" target="_blank"><img width="384" src="https://raw.githubusercontent.com/gothinkster/realworld/master/media/learn-btn-hr.png" /></a>
 
-Project demo is available at https://vue-vuex-realworld.netlify.app/
+### [Demo](https://react-redux.realworld.io)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
-This codebase was created to demonstrate a fully fledged fullstack application built with **Vue.js** including CRUD operations, authentication, routing, pagination, and more.
+Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353). The codebase is now feature complete; please submit bug fixes via pull requests & feedback via issues.
 
-We've gone to great lengths to adhere to the **Vue.js** community styleguides & best practices.
+We also have notes in [**our wiki**](https://github.com/gothinkster/react-redux-realworld-example-app/wiki) about how the various patterns used in this codebase and how they work (thanks [@thejmazz](https://github.com/thejmazz)!)
 
-For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 ## Getting started
 
-Before contributing please read the following:
+You can view a live demo over at https://react-redux.realworld.io/
 
-1. [RealWorld guidelines](https://github.com/gothinkster/realworld/tree/master/spec) for implementing a new framework,
-2. [RealWorld frontend instructions](https://github.com/gothinkster/realworld-starter-kit/blob/master/FRONTEND_INSTRUCTIONS.md)
-3. [Realworld API endpoints](https://github.com/gothinkster/realworld/tree/master/api)
-4. [Vue.js styleguide](https://vuejs.org/v2/style-guide/index.html). Priority A and B categories must be respected.
-5. [Editorconfig setup](https://editorconfig.org/#download). Most of the common editors support editorconfig by default (check the editorconfig download link for your ide), but editorconfig npm package have to installed globally for it to work,
+To get the frontend running locally:
 
-```bash
-# install editorconfig globally
-> npm install -g editorconfig
-```
+- Clone this repo
+- `npm install` to install all req'd dependencies
+- `npm start` to start the local server (this project uses create-react-app)
 
-The stack is built using [vue-cli webpack](https://github.com/vuejs-templates/webpack) so to get started all you have to do is:
+Local web server will use port 4100 instead of standard React's port 3000 to prevent conflicts with some backends like Node or Rails. You can configure port in scripts section of `package.json`: we use [cross-env](https://github.com/kentcdodds/cross-env) to set environment variable PORT for React scripts, this is Windows-compatible way of setting environment variables.
+ 
+Alternatively, you can add `.env` file in the root folder of project to set environment variables (use PORT to change webserver's port). This file will be ignored by git, so it is suitable for API keys and other sensitive stuff. Refer to [dotenv](https://github.com/motdotla/dotenv) and [React](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-development-environment-variables-in-env) documentation for more details. Also, please remove setting variable via script section of `package.json` - `dotenv` never override variables if they are already set.  
 
-``` bash
-# install dependencies
-> yarn install
-# serve with hot reload at localhost:8080
-> yarn serve
-```
+### Making requests to the backend API
 
-Other commands available are:
+For convenience, we have a live API server running at https://conduit.productionready.io/api for the application to make requests against. You can view [the API spec here](https://github.com/GoThinkster/productionready/blob/master/api) which contains all routes & responses for the server.
 
-``` bash
-# build for production with minification
-yarn run build
+The source code for the backend server (available for Node, Rails and Django) can be found in the [main RealWorld repo](https://github.com/gothinkster/realworld).
 
-# run unit tests
-yarn test
-```
+If you want to change the API URL to a local server, simply edit `src/agent.js` and change `API_ROOT` to the local server's URL (i.e. `http://localhost:3000/api`)
 
-## To know
 
-Current arbitrary choices are:
+## Functionality overview
 
-- Vuex modules for store
-- Vue-axios for ajax requests
-- 'rwv' as prefix for components
+The example application is a social blogging site (i.e. a Medium.com clone) called "Conduit". It uses a custom API for all requests, including authentication. You can view a live demo over at https://redux.productionready.io/
 
-These can be changed when the contributors reach a consensus.
+**General functionality:**
 
-## FAQ
+- Authenticate users via JWT (login/signup pages + logout button on settings page)
+- CRU* users (sign up & settings page - no deleting required)
+- CRUD Articles
+- CR*D Comments on articles (no updating required)
+- GET and display paginated lists of articles
+- Favorite articles
+- Follow other users
 
-<p><details>
-  <summary><b>Where can I find the service worker file?</b></summary>
+**The general page breakdown looks like this:**
 
-  The service worker file is generated automatically. The implementation can be found under [`src/registerServiceWorker.js`](https://github.com/gothinkster/vue-realworld-example-app/blob/eeaeb34fa440d00cd400545301ea203bd2a59284/src/registerServiceWorker.js). You can find the dependencies implementation in this repo: [yyx990803/register-service-worker](https://github.com/yyx990803/register-service-worker#readme).
+- Home page (URL: /#/ )
+    - List of tags
+    - List of articles pulled from either Feed, Global, or by Tag
+    - Pagination for list of articles
+- Sign in/Sign up pages (URL: /#/login, /#/register )
+    - Use JWT (store the token in localStorage)
+- Settings page (URL: /#/settings )
+- Editor page to create/edit articles (URL: /#/editor, /#/editor/article-slug-here )
+- Article page (URL: /#/article/article-slug-here )
+    - Delete article button (only shown to article's author)
+    - Render markdown from server client side
+    - Comments section at bottom of page
+    - Delete comment button (only shown to comment's author)
+- Profile page (URL: /#/@username, /#/@username/favorites )
+    - Show basic user info
+    - List of articles populated from author's created articles or author's favorited articles
 
-  Also, Google provided a good documentation on how to register a service worker: https://developers.google.com/web/fundamentals/primers/service-workers/registration
-</details></p>
+<br />
 
-<p><details>
-  <summary><b>Vue.js Function API / Migration to Vue.js 3</b></summary>
-
-  Related resources:
-
-  - [Vue.js Function API RFC](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md)
-  - [`vue-function-api` plugin](https://github.com/vuejs/vue-function-api)
-
-  Vue.js 3 will likely introduce breaking changes on how Vue.js applications will look like. For example, the Vue.js Function API might be introduced. This would cause a lot of our components to change in the overall structure. The changes would be minimal though. With the `vue-function-api` plugin, these changes could be applied already. The problem is that multiple integrations are not working with the plugin. There are intentions to make this work, but for the time being, we should rather focus on different areas. If you still want to be experimental with it, we are happy to get a Pull Request with some experimental feature implementations.
-</details></p>
-
-## Connect
-
-Join us on [Discord](https://discord.gg/NE2jNmg)
+[![Brought to you by Thinkster](https://raw.githubusercontent.com/gothinkster/realworld/master/media/end.png)](https://thinkster.io)
