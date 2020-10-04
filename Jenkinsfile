@@ -6,13 +6,10 @@ pipeline {
                 docker { image 'node:14-alpine' }
             }
             steps {
-                sh 'pwd'
                 dir("frontend") {
-                    sh 'pwd'
                     sh 'npm install'
-                    sh 'npm build'
+                    sh 'npm run react-scripts build'
                 }
-                sh 'pwd'
             }
         }
     }
