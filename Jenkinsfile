@@ -1,18 +1,11 @@
 pipeline {
-     agent any
-     stages {
-         stage('Set up') {
-             agent {
+    agent {
         docker {
-            image 'node:12.18.4-alpine3.12'
+            image 'node:12-stretch'
+            args '-p 3000:3000
         }
     }
-             steps {
-                 sh 'npm -version'
-             }
-         }
-         
-     
+     stages {
         stage('Build') {
             when {
                 branch 'development'
@@ -31,5 +24,5 @@ pipeline {
             }
         }
          
-}
+    }
 }
