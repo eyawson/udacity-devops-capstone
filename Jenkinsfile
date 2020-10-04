@@ -8,7 +8,7 @@ pipeline {
             steps {
                 dir("frontend") {
                     sh 'npm install'
-                    sh 'npm run react-scripts build'
+                    sh 'npm run-script build'
                 }
             }
         }
