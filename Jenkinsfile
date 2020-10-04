@@ -6,7 +6,7 @@ pipeline {
                 docker { image 'node:14-alpine' }
             }
             steps {
-                sh 'cd frontend'
+                sh 'cd frontend/'
                 sh 'npm install'
                 sh 'npm run build'
             }
