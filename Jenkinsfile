@@ -1,17 +1,12 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:12.18.4'
-            
-        }
-    }
+    agent none
     stages {
-        stage('Build') {
+        stage('Front-end') {
+            agent {
+                docker { image 'node:14-alpine' }
+            }
             steps {
-                sh 'pwd'
-                sh 'cd frontend'
-                sh 'pwd'
-                sh 'npm install'
+                sh 'node --version'
             }
         }
     }
