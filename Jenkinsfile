@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:12-stretch'
+            image 'node:12.18.4'
             args '-p 3000:3000'
         }
     }
@@ -16,11 +16,6 @@ pipeline {
                 sh 'pwd'
                 sh 'npm install'
                 sh 'npm build'
-                sh 'echo "Hello World"'
-                sh '''
-                    echo "Multiline shell steps works too"
-                    ls -lah
-                '''
             }
         }
          
