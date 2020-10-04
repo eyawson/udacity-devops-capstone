@@ -7,7 +7,7 @@ pipeline {
             }
             steps {
                 sh 'pwd'
-                dir(frontend) {
+                dir(/var/jenkins_home/workspace/city-devops-capstone_development/frontend) {
                     sh pwd
                 }
                 sh 'pwd'
