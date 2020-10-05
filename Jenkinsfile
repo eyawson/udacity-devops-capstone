@@ -1,8 +1,8 @@
 pipeline {
     agent none
     stages {
-        stage('Front-end') {
-            when { not { branch 'master' } }
+        stage('Build') {
+            when {  branch 'development' }
             agent {
                 docker { image 'node:14-alpine' }
             }
@@ -29,6 +29,14 @@ pipeline {
                 dir("backend") {
                     sh 'hadolint Dockerfile'
                 }
+            }
+            
+        }
+        stage('Deploy') {
+            when {  branch 'master' }
+            agent any
+            steps {
+                echo 'deploy branch'
             }
         }
     }
