@@ -15,7 +15,7 @@ pipeline {
             }
         }
         stage ('lint') {
-            when { not { branch 'master' } }
+            when { branch 'development'}
             agent {
                 docker {
                     image 'hadolint/hadolint:latest-debian'
@@ -31,6 +31,13 @@ pipeline {
                 }
             }
             
+        }
+        stage('Containerize') {
+            when {  branch 'staging' }
+            agent any
+            steps {
+                echo 'They are building!'
+            }
         }
         stage('Deploy') {
             when {  branch 'master' }
