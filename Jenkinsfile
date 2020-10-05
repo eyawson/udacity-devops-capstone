@@ -6,10 +6,7 @@ pipeline {
                 docker { image 'node:14-alpine' }
             }
             steps {
-                when {  expression {
-                return env.BRANCH_NAME != 'master';
-                } 
-                }
+                when { branch 'development'}
                 dir("frontend") {
                     sh 'npm install'
                     sh 'npm run-script build'
@@ -23,9 +20,10 @@ pipeline {
                 }
             }
             steps {
-                when {  expression {
-                return env.BRANCH_NAME != 'master';
-                } 
+                when {
+                    not {
+                        branch 'master'
+                    }
                 }
                 dir("frontend") {
                     sh 'hadolint Dockerfile'
