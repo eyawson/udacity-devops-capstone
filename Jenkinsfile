@@ -12,5 +12,20 @@ pipeline {
                 }
             }
         }
+        stage ('lint') {
+            agent {
+                docker {
+                    image 'hadolint/hadolint:latest-debian'
+                }
+            }
+            steps {
+                dir("frontend") {
+                    sh 'hadolint dockerfiles/*'
+                }
+                dir("backend") {
+                    sh 'hadolint dockerfiles/*'
+                }
+            }
+        }
     }
 }

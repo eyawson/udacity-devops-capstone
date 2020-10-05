@@ -1,7 +1,6 @@
-version: '3.1'
+version: "3.1"
 
 services:
-
   mongo:
     image: mongo:3
     restart: always
@@ -20,12 +19,11 @@ services:
     ports:
       - "4100:4100"
 
-
   backend:
     depends_on:
       - mongo
     build: ./backend/
     environment:
-      - MONGODB_URI=mongodb://mongo/conduit
+      - MONGODB_URI=mongodb:27017//mongo:/conduit
     expose:
       - "3000"
