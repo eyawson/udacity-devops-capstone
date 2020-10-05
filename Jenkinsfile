@@ -20,9 +20,11 @@ pipeline {
             }
             steps {
                 dir("frontend") {
+                    sh 'pwd'
                     sh 'hadolint Dockerfile'
                 }
                 dir("backend") {
+                    sh 'pwd'
                     sh 'hadolint Dockerfile'
                 }
             }
