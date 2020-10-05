@@ -20,10 +20,7 @@ pipeline {
                 }
             }
             steps {
-                when {
-                    not {
-                        branch 'master'
-                    }
+                when { branch 'development'}
                 }
                 dir("frontend") {
                     sh 'hadolint Dockerfile'
