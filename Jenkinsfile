@@ -23,13 +23,14 @@ pipeline {
                 }
             }
             steps {
-                when { not { branch 'master' } }
+                when { when {  expression {
+                return env.BRANCH_NAME != 'master';
+                } 
+                }
                 dir("frontend") {
-                    sh 'pwd'
                     sh 'hadolint Dockerfile'
                 }
                 dir("backend") {
-                    sh 'pwd'
                     sh 'hadolint Dockerfile'
                 }
             }
