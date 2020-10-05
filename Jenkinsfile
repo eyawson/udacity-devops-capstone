@@ -21,7 +21,6 @@ pipeline {
             }
             steps {
                 when { branch 'development'}
-                }
                 dir("frontend") {
                     sh 'hadolint Dockerfile'
                 }
