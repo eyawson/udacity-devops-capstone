@@ -2,11 +2,12 @@ pipeline {
     agent none
     stages {
         stage('Front-end') {
+            when { not { branch 'master' } }
             agent {
                 docker { image 'node:14-alpine' }
             }
             steps {
-                when { branch 'development'}
+                
                 dir("frontend") {
                     sh 'npm install'
                     sh 'npm run-script build'
@@ -14,13 +15,14 @@ pipeline {
             }
         }
         stage ('lint') {
+            when { not { branch 'master' } }
             agent {
                 docker {
                     image 'hadolint/hadolint:latest-debian'
                 }
             }
             steps {
-                when { branch 'development'}
+                
                 dir("frontend") {
                     sh 'hadolint Dockerfile'
                 }
