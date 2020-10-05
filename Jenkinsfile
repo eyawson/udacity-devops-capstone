@@ -6,7 +6,10 @@ pipeline {
                 docker { image 'node:14-alpine' }
             }
             steps {
-                when {  branch 'development' }
+                when {  expression {
+                return env.BRANCH_NAME != 'master';
+                } 
+                }
                 dir("frontend") {
                     sh 'npm install'
                     sh 'npm run-script build'
