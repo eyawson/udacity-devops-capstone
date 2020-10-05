@@ -6,6 +6,7 @@ pipeline {
                 docker { image 'node:14-alpine' }
             }
             steps {
+                when {  branch 'development' }
                 dir("frontend") {
                     sh 'npm install'
                     sh 'npm run-script build'
@@ -19,6 +20,7 @@ pipeline {
                 }
             }
             steps {
+                when { anyOf { branch 'development'; branch 'staging' } }
                 dir("frontend") {
                     sh 'pwd'
                     sh 'hadolint Dockerfile'
