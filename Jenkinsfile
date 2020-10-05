@@ -23,7 +23,7 @@ pipeline {
                 }
             }
             steps {
-                when { when {  expression {
+                when {  expression {
                 return env.BRANCH_NAME != 'master';
                 } 
                 }
