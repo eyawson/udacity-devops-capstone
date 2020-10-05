@@ -20,7 +20,7 @@ pipeline {
                 }
             }
             steps {
-                when { anyOf { branch 'development'; branch 'staging' } }
+                when { not { branch 'master' } }
                 dir("frontend") {
                     sh 'pwd'
                     sh 'hadolint Dockerfile'
