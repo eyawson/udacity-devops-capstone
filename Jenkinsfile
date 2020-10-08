@@ -15,6 +15,10 @@ pipeline {
                     sh 'npm install'
                     sh 'npm run-script build'
                 }
+                withAWS(region: 'us-west-2', credentials: 'AWS') {
+                    sh 'aws eks --region us-west-2 update-kubeconfig --name jenkins'
+                }
+
             }
         }
         stage ('lint') {
