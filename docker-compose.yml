@@ -24,6 +24,6 @@ services:
       - mongo
     build: ./backend/
     environment:
-      - MONGODB_URI=mongodb:27017//mongo:/conduit
+      - MONGODB_URI=mongodb://locahost/conduit
     expose:
       - "3000"
