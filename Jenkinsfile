@@ -10,17 +10,17 @@ pipeline {
                 HOME = '.'
             }
             steps {
-                
-                dir("frontend") {
-                    sh 'npm install'
-                    sh 'npm run-script build'
-                }
                 sh 'which aws'
                 withAWS(region: 'us-west-2', credentials: 'AWS') {
                     sh '''
                         aws eks --region us-west-2 update-kubeconfig --name jenkins
                         '''
                 }
+                dir("frontend") {
+                    sh 'npm install'
+                    sh 'npm run-script build'
+                }
+                
             }
         }
         stage ('lint') {
