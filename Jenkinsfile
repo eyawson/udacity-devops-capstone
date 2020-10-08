@@ -1,6 +1,17 @@
 pipeline {
     agent none
     stages {
+        stage('buildKube'){
+            agent any
+            steps {
+                   sh 'which aws'
+                withAWS(region: 'us-west-2', credentials: 'AWS') {
+                    sh '''
+                        aws eks --region us-west-2 update-kubeconfig --name jenkins
+                        '''
+                }
+            }
+        }
         stage('Build') {
             when {  branch 'development' }
             agent {
@@ -10,12 +21,6 @@ pipeline {
                 HOME = '.'
             }
             steps {
-                sh 'which aws'
-                withAWS(region: 'us-west-2', credentials: 'AWS') {
-                    sh '''
-                        aws eks --region us-west-2 update-kubeconfig --name jenkins
-                        '''
-                }
                 dir("frontend") {
                     sh 'npm install'
                     sh 'npm run-script build'
