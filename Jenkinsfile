@@ -21,11 +21,8 @@ pipeline {
                 HOME = '.'
             }
             steps {
-                dir("frontend") {
                     sh 'npm install'
                     sh 'npm run-script build'
-                }
-                
             }
         }
         stage ('lint') {
@@ -36,9 +33,7 @@ pipeline {
                 }
             }
             steps {
-                dir("frontend") {
                     sh 'hadolint Dockerfile'
-                }
             }
             
         }
@@ -59,9 +54,7 @@ pipeline {
                 HOME = '.'
             } 
             steps {
-                sh 'docker-compose down'
-                sh 'docker tag udacity-devops-capstone_staging_frontend_1 ${env.BUILD_ID}_frontend'
-                
+                sh 'docker tag udacity-devops-capstone_staging_1 ${env.BUILD_ID}_frontend'
                 sh 'docker stop $(docker ps -q)'
                 sh 'docker system prune -af --volumes'
             }
