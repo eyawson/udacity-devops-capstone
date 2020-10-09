@@ -47,6 +47,7 @@ pipeline {
             } 
             steps {
                 echo '${env.BUILD_ID}'
+                sh "echo My hostname is: ${HOSTNAME}"
             }
         }
         stage('Deploy') {
