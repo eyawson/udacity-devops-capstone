@@ -39,8 +39,8 @@ pipeline {
             agent any
             steps {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
-                sh 'docker tag ${BUILD_ID} akwele/capstone'
-                sh 'docker push akwele/capstone:${BUILD_ID}'
+                sh 'docker tag ${BUILD_ID} akwele/capstone-${BUILD_ID}'
+                sh 'docker push akwele/capstone'
                 }
             }
         }
