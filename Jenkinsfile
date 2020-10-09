@@ -41,10 +41,17 @@ pipeline {
             when {  branch 'staging' }
             agent any 
             steps {
-                sh 'docker system prune'
                 sh "docker build -t ${BUILD_ID} ."
                 sh 'docker images'
+            }
+        }
+        stage('Publish) {
+            when { branch 'staging' }
+            steps {
+                withDockerRegistry([ credentialsId: "docker", url: "" ]) {
+                sh 'docker tag ${BUILD_ID} akwele/capstone'
                 sh 'docker stop $(docker ps -q)'
+                }
             }
         }
         stage('Deploy') {
