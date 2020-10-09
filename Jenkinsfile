@@ -1,6 +1,7 @@
 pipeline {
     agent none
-        stage('Build') {
+    stages {
+        stage ('Build') {
             when {  branch 'development' }
             agent {
                 docker { image 'node:14-alpine' }
@@ -43,7 +44,7 @@ pipeline {
                 }
             }
         }
-        stages {
+        
         stage('buildKube'){
             when {  branch 'master' }
             agent any
