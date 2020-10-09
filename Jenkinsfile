@@ -41,8 +41,10 @@ pipeline {
             when {  branch 'staging' }
             agent any 
             steps {
+                sh 'docker system prune'
                 sh "docker build -t ${BUILD_ID} ."
                 sh 'docker images'
+                sh 'docker stop $(docker ps -q)'
             }
         }
         stage('Deploy') {
