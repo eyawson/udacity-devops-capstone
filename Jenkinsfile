@@ -39,12 +39,7 @@ pipeline {
         }
         stage('Containerize') {
             when {  branch 'staging' }
-            agent {
-                docker { image 'node:14-alpine' }
-            }
-            environment {
-                HOME = '.'
-            } 
+            agent any 
             steps {
                 sh "docker build -t ${BUILD_ID} ."
             }
