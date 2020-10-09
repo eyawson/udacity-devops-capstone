@@ -30,7 +30,7 @@ pipeline {
             when {  branch 'staging' }
             agent any 
             steps {
-                sh "docker build -t ${BUILD_ID} ."
+                sh "docker build -t akwele/capstone-${BUILD_ID} ."
                 sh 'docker images'
             }
         }
@@ -39,8 +39,8 @@ pipeline {
             agent any
             steps {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
-                sh 'docker tag ${BUILD_ID} akwele/capstone-${BUILD_ID}'
-                sh 'docker push akwele/capstone'
+                
+                sh 'docker push akwele/capstone-${BUILD_ID}'
                 }
             }
         }
