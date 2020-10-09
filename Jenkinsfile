@@ -39,14 +39,6 @@ pipeline {
         }
         stage('Containerize') {
             when {  branch 'staging' }
-            agent any
-            steps {
-                sh 'pwd'
-                sh 'docker system prune'
-            }
-        }
-        stage('Tag Build') {
-            when {  branch 'staging' }
             agent {
                 docker { image 'node:14-alpine' }
             }
@@ -54,8 +46,8 @@ pipeline {
                 HOME = '.'
             } 
             steps {
-                sh 'docker tag udacity-devops-capstone_staging_1 ${env.BUILD_ID}_frontend'
-                sh 'docker stop $(docker ps -q)'
+                sh 'docker build -t ${env.BUILD_ID} .'
+                sh 'docker images'
                 sh 'docker system prune -af --volumes'
             }
         }

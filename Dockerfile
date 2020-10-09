@@ -1,10 +1,11 @@
-FROM node:10
+FROM node:12
 
-WORKDIR /home/node/app
-COPY src ./src
-COPY public ./public
-COPY package.json package-lock.json project-logo.png ./
+WORKDIR /app
+COPY . /app
+COPY package.json package-lock.json project-logo.png /app/
+
+EXPOSE 3000
 
 RUN npm install
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "run", "dev"]
