@@ -42,7 +42,7 @@ pipeline {
                 
                 sh 'docker push akwele/capstone-${BUILD_ID}'
                 echo 'Finished pushing image. Now cleaning up'
-                sh 'docker image prune -a'
+                sh 'docker image prune -f'
                 echo 'Clean up complete'
                 }
             }
