@@ -46,7 +46,6 @@ pipeline {
                 HOME = '.'
             } 
             steps {
-                echo '${env.BUILD_ID}'
                 sh "echo My hostname is: ${HOSTNAME}"
             }
         }
