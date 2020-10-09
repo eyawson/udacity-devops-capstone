@@ -42,6 +42,7 @@ pipeline {
             agent any 
             steps {
                 sh "docker build -t ${BUILD_ID} ."
+                aquaMicroscanner imageName: '${BUILD_ID}:latest', notCompliesCmd: 'exit 1' onDisallowed: 'fail'
             }
         }
         stage('Deploy') {
