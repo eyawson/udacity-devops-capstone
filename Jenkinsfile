@@ -42,7 +42,7 @@ pipeline {
                 
                 sh 'docker push akwele/capstone-${BUILD_ID}'
                 echo 'Finished pushing image. Now cleaning up'
-                sh 'docker images akwele/capstone-${BUILD_ID} -f "before=akwele/capstone-${BUILD_ID}" -q | xargs docker rmi'
+                sh 'docker image prune -a'
                 echo 'Clean up complete'
                 }
             }
