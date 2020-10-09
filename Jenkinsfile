@@ -51,11 +51,24 @@ pipeline {
             agent any
             steps {
                 sh 'pwd'
+                sh 'docker system prune'
                 sh 'docker-compose up'
-                sh 'docker tag frontend ${env.BUILD_ID}_frontend'
-                sh 'docker tag backend ${env.BUILD_ID}_backend'
-                sh 'docker tag mongo ${env.BUILD_ID}_backend'
+            }
+        }
+        stage('Tag Build') {
+            when {  branch 'staging' }
+            agent {
+                docker { image 'node:14-alpine' }
+            }
+            environment {
+                HOME = '.'
+            } 
+            steps {
                 sh 'docker-compose down'
+                sh 'docker tag udacity-devops-capstone_staging_frontend_1 ${env.BUILD_ID}_frontend'
+                sh 'docker tag udacity-devops-capstone_staging_backend_1 ${env.BUILD_ID}_backend'
+                sh 'docker tag udacity-devops-capstone_staging_mongo_1 ${env.BUILD_ID}_backend'
+                
                 sh 'docker stop $(docker ps -q)'
                 sh 'docker system prune -af --volumes'
             }
