@@ -40,7 +40,7 @@ pipeline {
             steps {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
                 sh 'docker tag ${BUILD_ID} akwele/capstone'
-                sh 'docker push akwele/capstone'
+                sh 'docker push akwele/capstone:${BUILD_ID}'
                 }
             }
         }
