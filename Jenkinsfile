@@ -47,6 +47,7 @@ pipeline {
         }
         stage('Publish') {
             when { branch 'staging' }
+            agent any
             steps {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
                 sh 'docker tag ${BUILD_ID} akwele/capstone'
