@@ -46,7 +46,7 @@ pipeline {
                 HOME = '.'
             } 
             steps {
-                sh "echo My hostname is: ${BUILD_ID}"
+                sh "docker build -t ${BUILD_ID} ."
             }
         }
         stage('Deploy') {
