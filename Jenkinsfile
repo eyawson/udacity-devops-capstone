@@ -45,7 +45,7 @@ pipeline {
                 sh 'docker images'
             }
         }
-        stage('Publish) {
+        stage('Publish') {
             when { branch 'staging' }
             steps {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
