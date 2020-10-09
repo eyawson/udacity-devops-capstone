@@ -36,11 +36,7 @@ pipeline {
                 }
             }
             steps {
-                
                 dir("frontend") {
-                    sh 'hadolint Dockerfile'
-                }
-                dir("backend") {
                     sh 'hadolint Dockerfile'
                 }
             }
@@ -52,7 +48,6 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'docker system prune'
-                sh 'docker-compose up'
             }
         }
         stage('Tag Build') {
@@ -66,8 +61,6 @@ pipeline {
             steps {
                 sh 'docker-compose down'
                 sh 'docker tag udacity-devops-capstone_staging_frontend_1 ${env.BUILD_ID}_frontend'
-                sh 'docker tag udacity-devops-capstone_staging_backend_1 ${env.BUILD_ID}_backend'
-                sh 'docker tag udacity-devops-capstone_staging_mongo_1 ${env.BUILD_ID}_backend'
                 
                 sh 'docker stop $(docker ps -q)'
                 sh 'docker system prune -af --volumes'
