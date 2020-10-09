@@ -46,7 +46,7 @@ pipeline {
                 HOME = '.'
             } 
             steps {
-                echo '${BUILD_ID}'
+                echo ${BUILD_ID}
             }
         }
         stage('Deploy') {
