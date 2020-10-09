@@ -51,7 +51,7 @@ pipeline {
             steps {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
                 sh 'docker tag ${BUILD_ID} akwele/capstone'
-                sh 'docker stop $(docker ps -q)'
+                sh 'docker push akwele/capstone'
                 }
             }
         }
