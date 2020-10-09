@@ -1,17 +1,5 @@
 pipeline {
     agent none
-    stages {
-        stage('buildKube'){
-            when {  branch 'master' }
-            agent any
-            steps {
-                withAWS(region: 'us-west-2', credentials: 'AWS') {
-                    sh '''
-                        aws eks --region us-west-2 update-kubeconfig --name capstone
-                        '''
-                }
-            }
-        }
         stage('Build') {
             when {  branch 'development' }
             agent {
@@ -52,6 +40,18 @@ pipeline {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
                 sh 'docker tag ${BUILD_ID} akwele/capstone'
                 sh 'docker push akwele/capstone'
+                }
+            }
+        }
+        stages {
+        stage('buildKube'){
+            when {  branch 'master' }
+            agent any
+            steps {
+                withAWS(region: 'us-west-2', credentials: 'AWS') {
+                    sh '''
+                        aws eks --region us-west-2 update-kubeconfig --name capstone
+                        '''
                 }
             }
         }
