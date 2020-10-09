@@ -41,6 +41,9 @@ pipeline {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
                 
                 sh 'docker push akwele/capstone-${BUILD_ID}'
+                echo 'Finished pushing image. Now cleaning up'
+                sh 'docker image prune -a'
+                echo 'Clean up complete'
                 }
             }
         }
