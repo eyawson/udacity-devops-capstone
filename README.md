@@ -22,6 +22,6 @@ Coming soon!
 
 Install dependencies `npm install`
 
-Start frontend `npm start`
+Start frontend `npm run dev`
 
 ### Installation (container)

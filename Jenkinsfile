@@ -22,7 +22,7 @@ pipeline {
             }
             steps {
                     sh 'npm install'
-                    sh 'npm run-script build'
+                    sh 'npm run build'
             }
         }
         stage ('lint') {
