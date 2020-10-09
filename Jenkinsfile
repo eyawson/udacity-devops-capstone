@@ -46,9 +46,7 @@ pipeline {
                 HOME = '.'
             } 
             steps {
-                sh 'docker build -t ${env.BUILD_ID} .'
-                sh 'docker images'
-                sh 'docker system prune -af --volumes'
+                echo '${env.BUILD_ID} .'
             }
         }
         stage('Deploy') {
