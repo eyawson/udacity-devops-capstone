@@ -2,9 +2,9 @@ pipeline {
     agent none
     stages {
         stage('buildKube'){
+            when {  branch 'master' }
             agent any
             steps {
-                   sh 'which aws'
                 withAWS(region: 'us-west-2', credentials: 'AWS') {
                     sh '''
                         aws eks --region us-west-2 update-kubeconfig --name capstone
@@ -50,7 +50,14 @@ pipeline {
             when {  branch 'staging' }
             agent any
             steps {
-                echo 'They are building!'
+                sh 'pwd'
+                sh 'docker-compose up'
+                sh 'docker tag frontend ${env.BUILD_ID}_frontend'
+                sh 'docker tag backend ${env.BUILD_ID}_backend'
+                sh 'docker tag mongo ${env.BUILD_ID}_backend'
+                sh 'docker-compose down'
+                sh 'docker stop $(docker ps -q)'
+                sh 'docker system prune -af --volumes'
             }
         }
         stage('Deploy') {
