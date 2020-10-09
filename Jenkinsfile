@@ -42,12 +42,8 @@ pipeline {
             agent any 
             steps {
                 sh "docker build -t ${BUILD_ID} ."
-                
+                sh 'docker images'
             }
-        }
-        stage('Scan Container') {
-            when { branch 'staging'}
-                steps {aquaMicroscanner imageName: '${BUILD_ID}:latest', notCompliesCmd: 'exit 1', onDisallowed: 'fail'}
         }
         stage('Deploy') {
             when {  branch 'master' }
