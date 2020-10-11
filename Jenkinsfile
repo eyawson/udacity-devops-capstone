@@ -77,19 +77,19 @@ pipeline {
             }
         }
         stage('Smoke test') {
-            when {  branch 'post' }
+            when {  branch 'master' }
             agent any
             steps {
                 echo 'Checking if endpoint is reachable'
                 withAWS(credentials: 'AWS', region: 'us-west-2') {
                     sh 'https://824BD043CD83B114CB14932D3510D82E.gr7.us-west-2.eks.amazonaws.com'
                 }
-                echo 'Success! Endpoint is reacheable'
+                echo 'Success! Endpoint is reachable'
             }
          }
 
         stage('Clean Up') {
-            when {branch 'post'}
+            when {branch 'master'}
             agent any
             steps {
                 echo 'Deleting local images...'
