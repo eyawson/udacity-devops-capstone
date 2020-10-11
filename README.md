@@ -36,4 +36,18 @@ Start frontend `npm run dev`
 
 ### Installation (container)
 
-Docker pull...
+Docker pull from akwele/capstone
+
+References:
+
+- <https://medium.com/better-programming/turn-your-own-docker-image-into-an-auto-scaling-kubernetes-deployment-using-amazon-eks-bd2ab8ef56cc>
+
+- <https://docs.aws.amazon.com/eks/latest/userguide/dashboard-tutorial.html>
+
+- <https://www.notion.so/Capstone-a6e4906eee484c15b9a8fac978bfb799#45cf0ccd056a4d7f85488fb882c2a340>
+
+- <https://www.notion.so/Capstone-a6e4906eee484c15b9a8fac978bfb799#94dddae949594828983034b1be5b7462>
+
+- Stackoverflow
+
+- Google Google GOogle
