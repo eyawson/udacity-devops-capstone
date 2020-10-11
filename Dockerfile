@@ -1,6 +1,6 @@
 FROM node:14-alpine
 
-WORKDIR /app
+WORKDIR /app..
 COPY . /app
 COPY package.json package-lock.json project-logo.png /app/
 
