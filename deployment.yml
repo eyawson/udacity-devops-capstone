@@ -48,7 +48,7 @@ spec:
               memory: 32Mi
               cpu: 200m
           ports:
-            - containerPort: 80
+            - containerPort: 3000
           livenessProbe:
             httpGet:
               path: /

@@ -81,7 +81,7 @@ pipeline {
             agent any
             steps {
                 echo 'Checking if endpoint is reachable'
-                withAWS(credentials: 'aws-static', region: 'us-west-2') {
+                withAWS(credentials: 'AWS', region: 'us-west-2') {
                     sh 'https://824BD043CD83B114CB14932D3510D82E.gr7.us-west-2.eks.amazonaws.com'
                 }
                 echo 'Success! Endpoint is reacheable'
