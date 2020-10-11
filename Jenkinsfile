@@ -72,12 +72,12 @@ pipeline {
                         echo 'We are doploying the build. Sit tight...'
                         sh 'aws eks --region us-west-2 update-kubeconfig --name capstone'
                         sh 'kubectl config use-context arn:aws:eks:us-west-2:186250519284:cluster/capstone'
-                        sh 'kubectl apply -f deployment.yml'
+                        sh 'kubectl apply -f deploymentB.yml'
                 }
             }
         }
         stage('Smoke test') {
-            when {  branch 'master' }
+            when {  branch 'post' }
             agent any
             steps {
                 echo 'Checking if endpoint is reachable'

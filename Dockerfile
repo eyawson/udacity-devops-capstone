@@ -4,8 +4,8 @@ WORKDIR /app
 COPY . /app
 COPY package.json package-lock.json project-logo.png /app/
 
-EXPOSE 80
+EXPOSE 3000
 
-RUN npm ci
+RUN npm install
 
 CMD ["npm", "run", "dev"]
