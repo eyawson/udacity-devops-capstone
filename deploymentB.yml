@@ -2,15 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: capstone
+  labels:
+    app: capstone
 spec:
-  replicas: 2
+  replicas: 3
+  selector:
+    matchLabels:
+      app: capstone
   template:
     metadata:
       labels:
-        app: nodejs
-  spec:
-    containers:
-      - name: udacity
-    image: akwele/capstone
-    ports:
-      - containerPort: 3000
+        app: capstone
+    spec:
+      containers:
+        - name: udacity
+          image: akwele/capstone
+          ports:
+            - containerPort: 3000
