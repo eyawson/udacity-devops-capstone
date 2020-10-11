@@ -5,9 +5,13 @@ metadata:
   labels:
     app: capstone
 spec:
-  replicas: 4
+  replicas: 2
   strategy:
     type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
   selector:
     matchLabels:
       app: capstone
