@@ -30,7 +30,7 @@ pipeline {
             when { branch 'development'}
             agent any
             steps {
-                    sh 'ansible-lint main.yml eks'
+                    sh 'ansible-lint main.yml roles'
             }
             
         }
