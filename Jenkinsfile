@@ -14,7 +14,7 @@ pipeline {
                     sh 'npm run build'
             }
         }
-        stage ('lint') {
+        stage ('lint docker') {
             when { branch 'development'}
             agent {
                 docker {
@@ -26,36 +26,40 @@ pipeline {
             }
             
         }
-        stage('Containerize') {
+        stage ('lint yaml') {
+            when { branch 'development'}
+            agent any
+            steps {
+                    sh 'ansible-lint main.yml eks'
+            }
+            
+        }
+        stage('Dockerize') {
             when {  branch 'staging' }
             agent any 
             steps {
-                sh "docker build -t akwele/capstone-${BUILD_ID} ."
+                sh 'docker build -t akwele/capstone .'
                 sh 'docker images'
             }
         }
-        stage('Publish') {
+        stage('Publish to Docker Registry') {
             when { branch 'staging' }
             agent any
             steps {
                 withDockerRegistry([ credentialsId: "docker", url: "" ]) {
-                
-                sh 'docker push akwele/capstone-${BUILD_ID}'
-                echo 'Finished pushing image. Now cleaning up'
-                sh 'docker image prune -f'
-                echo 'Clean up complete'
+                echo 'Pushing image to Docker hub'
+                sh 'docker push akwele/capstone'
+                echo 'Image pushed to Docker hub successfully'
                 }
             }
         }
         
-        stage('buildKube'){
+        stage('build KubeConfig'){
             when {  branch 'master' }
             agent any
             steps {
                 withAWS(region: 'us-west-2', credentials: 'AWS') {
-                    sh '''
-                        aws eks --region us-west-2 update-kubeconfig --name capstone
-                        '''
+                    sh 'aws eks --region us-west-2 update-kubeconfig --name capstone'
                 }
             }
         }
@@ -63,7 +67,34 @@ pipeline {
             when {  branch 'master' }
             agent any
             steps {
-                echo 'deploy branch'
+                echo 'Deploying to EKS cluster'
+                    withAWS(region: 'us-west-2', credentials: 'AWS') {
+                        echo 'We are doploying the build. Sit tight...'
+                        sh 'aws eks --region us-west-2 update-kubeconfig --name capstone'
+                        sh 'kubectl config use-context arn:aws:eks:us-west-2:186250519284:cluster/capstone'
+                        sh 'kubectl apply -f deployment.yaml'
+                }
+            }
+        }
+        stage('Smoke test') {
+            when {  branch 'post' }
+            agent any
+            steps {
+                echo 'Checking if endpoint is reachable'
+                withAWS(credentials: 'aws-static', region: 'us-west-2') {
+                    sh 'https://824BD043CD83B114CB14932D3510D82E.gr7.us-west-2.eks.amazonaws.com'
+                }
+                echo 'Success! Endpoint is reacheable'
+            }
+         }
+
+        stage('Clean Up') {
+            when {branch 'post'}
+            agent any
+            steps {
+                echo 'Deleting local images...'
+                sh 'docker image prune -a --force --filter "until=2020-10-10T00:00:00"'
+                echo 'Clean up complete'
             }
         }
     }

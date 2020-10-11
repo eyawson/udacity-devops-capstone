@@ -8,11 +8,13 @@ Coming soon!
 
 - [Application Source](https://github.com/gothinkster/realworld)
 
-- [Docker Image](https://hub.docker.com)
+- [Docker](https://hub.docker.com)
 
-- Kubernetes
+- Container Service: Kubernetes
 
-- Ansible
+- CI/CD: Jenkins
+
+- Orchestration: Ansible
 
 ### Getting Started
 
@@ -25,3 +27,5 @@ Install dependencies `npm install`
 Start frontend `npm run dev`
 
 ### Installation (container)
+
+Docker pull...

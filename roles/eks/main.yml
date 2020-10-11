@@ -1,0 +1,14 @@
+- name: create the eks cluster
+  shell: >
+    eksctl create cluster \
+    --name capstone \
+    --version 1.17 \
+    --region us-west-2 \
+    --nodegroup-name capstone-linux-nodes \
+    --node-type t2.medium \
+    --nodes-min 0 \
+    --nodes-max 4 \
+    --ssh-access \
+    --ssh-public-key devops \
+    --managed
+  when: eks_check_output.stdout == "No clusters found"
